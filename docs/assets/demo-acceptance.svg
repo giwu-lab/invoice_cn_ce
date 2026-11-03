@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f6f8fa"/><stop offset="100%" stop-color="#eef1f5"/></linearGradient></defs>
+<rect width="1200" height="640" fill="url(#bg)"/>
+<text x="36" y="46" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#1f2328">电子银行承兑汇票 —— 出票人、收款人、承兑人一次取全</text>
+<text x="36" y="70" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="13" fill="#57606a">POST /acceptance/batch 的返回字段，票面主体信息已脱敏</text>
+<rect x="36" y="96" width="430" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="36" y="96" width="430" height="34" rx="10" fill="#0969da"/>
+<rect x="36" y="120" width="430" height="10" fill="#0969da"/>
+<text x="50" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">① 调接口</text>
+<text x="50" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">企业版能力，需要有效许可证</text>
+<rect x="52" y="164" width="398" height="112" rx="8" fill="#f6f8fa" stroke="#e1e4e8"/>
+<text x="66" y="188" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">curl -H &#x27;X-API-Key: $KEY&#x27; \</text>
+<text x="66" y="208" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     -F &#x27;files=@承兑汇票A.pdf&#x27; \</text>
+<text x="66" y="228" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     http://localhost:8091/acceptance/batch</text>
+<text x="66" y="258" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#57606a"># 返回数组，顺序与上传顺序一致</text>
+<rect x="52" y="292" width="236" height="28" rx="6" fill="#fff" stroke="#d0d7de"/>
+<text x="66" y="311" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#0969da">承兑汇票A.pdf</text>
+<text x="52" y="344" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">只有批量端点，没有单文件端点</text>
+<text x="52" y="368" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">要解析单张，就传一份</text>
+<rect x="52" y="394" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="420" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">票据号码跨行印刷，按词坐标锚定取值</text>
+<text x="52" y="444" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">不是「标签: 值」同行正则</text>
+<rect x="52" y="470" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="496" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">误投到 /invoice 会返回 422</text>
+<text x="52" y="520" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">message 里写明该走哪个端点</text>
+<rect x="500" y="96" width="664" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="500" y="96" width="664" height="34" rx="10" fill="#1a7f37"/>
+<rect x="500" y="120" width="664" height="10" fill="#1a7f37"/>
+<text x="514" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">② 拿字段</text>
+<text x="514" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">共 25 个字段，此处列出 12 个代表字段</text>
+<text x="514" y="170" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="11.5" fill="#6e7781">未展示：bill_type · issue_date · acceptance_date · currency · acceptor_name · acceptor_account · acceptor_bank_no · contract_no · transferable · display_date 等</text>
+<text x="516" y="196" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">票据号码</text>
+<text x="628" y="196" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11" fill="#1f2328">510000000000000000000000000000000000000000-…</text>
+<text x="516" y="222" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">票据状态</text>
+<text x="628" y="222" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">已收票-可流通</text>
+<text x="516" y="248" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">出票人</text>
+<text x="628" y="248" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例出票人股份有限公司</text>
+<text x="516" y="274" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">出票人账号</text>
+<text x="628" y="274" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">6220000000000000</text>
+<text x="516" y="300" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">出票人开户行</text>
+<text x="628" y="300" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例银行股份有限公司示例支行</text>
+<text x="516" y="326" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">收款人</text>
+<text x="628" y="326" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例收款人有限公司</text>
+<text x="516" y="352" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">收款人账号</text>
+<text x="628" y="352" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">6220000000000001</text>
+<text x="516" y="378" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">承兑人开户行</text>
+<text x="628" y="378" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例银行股份有限公司示例支行</text>
+<text x="516" y="404" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">票据金额</text>
+<text x="628" y="404" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">94000.00</text>
+<text x="516" y="430" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">票据金额大写</text>
+<text x="628" y="430" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">玖万肆仟元整</text>
+<text x="516" y="456" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">到期日</text>
+<text x="628" y="456" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">2027-04-27</text>
+<text x="516" y="482" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">转让背书</text>
+<text x="628" y="482" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">endorsements[]</text>
+<text x="516" y="508" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">message</text>
+<text x="628" y="508" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1a7f37">success</text>
+<rect x="516" y="528" width="632" height="1" fill="#e1e4e8"/>
+<text x="516" y="548" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">账号与开户行直接从票面取，落库即可对账</text>
+<text x="516" y="570" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">完整 25 个字段：docs/api-acceptance-batch.md</text>
+<text x="36" y="618" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#6e7781">电子承兑汇票属企业版能力，开源版调用该端点返回 403 feature_not_available。</text>
+</svg>

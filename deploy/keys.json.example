@@ -1,0 +1,32 @@
+[
+  {
+    "key": "<REPLACE_ME_openssl_rand_base64_32>",
+    "key_id": "<REPLACE_ME_sha256_of_key_above_first_8_chars>",
+    "label": "frontend-spa",
+    "scopes": ["extract"],
+    "rpm": 200,
+    "burst": 30
+  },
+  {
+    "key": "<REPLACE_ME_openssl_rand_base64_32>",
+    "key_id": "<REPLACE_ME_sha256_of_key_above_first_8_chars>",
+    "label": "n8n-workflow",
+    "scopes": ["extract"],
+    "rpm": 30,
+    "burst": 5
+  },
+  {
+    "key": "<REPLACE_ME_openssl_rand_base64_32>",
+    "key_id": "<REPLACE_ME_sha256_of_key_above_first_8_chars>",
+    "label": "verify-job",
+    "scopes": ["extract", "verify"],
+    "rpm": 10,
+    "burst": 2
+  },
+  {
+    "key": "<REPLACE_ME_openssl_rand_base64_32>",
+    "key_id": "<REPLACE_ME_sha256_of_key_above_first_8_chars>",
+    "label": "platform-ops",
+    "scopes": ["extract", "verify", "admin"]
+  }
+]

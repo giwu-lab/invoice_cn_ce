@@ -1,0 +1,46 @@
+services:
+  invoice_cn_ce:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: invoice_cn_ce:1.0.0-ce
+    container_name: invoice_cn_ce
+    restart: unless-stopped
+    ports:
+      - "8091:8091"
+    environment:
+      IC_HOST: "${IC_HOST:-0.0.0.0}"
+      IC_PORT: "${IC_PORT:-8091}"
+      # 国税查验代理（默认关闭；开启时设置 VERIFY_ENDPOINT 指向你的代理）
+      IC_VERIFY_ENABLED: "${IC_VERIFY_ENABLED:-false}"
+      IC_VERIFY_ENDPOINT: "${IC_VERIFY_ENDPOINT:-}"
+      IC_VERIFY_API_KEY:  "${IC_VERIFY_API_KEY:-}"
+      IC_VERIFY_TIMEOUT:  "${IC_VERIFY_TIMEOUT:-15}"
+      # 性能开关
+      IC_CACHE_SIZE:    "${IC_CACHE_SIZE:-128}"
+      IC_BATCH_WORKERS: "${IC_BATCH_WORKERS:-4}"
+      # 文件大小（单文件上限 IC_MAX_FILE_MB 对 /invoice 与 /invoice/batch 同时生效）
+      IC_MAX_FILE_MB:        "${IC_MAX_FILE_MB:-10}"
+      IC_MAX_BATCH_FILES:    "${IC_MAX_BATCH_FILES:-50}"
+      IC_MAX_BATCH_TOTAL_MB: "${IC_MAX_BATCH_TOTAL_MB:-500}"
+      # API 鉴权（默认开启；两值都空时回退到 dev 模式 + WARN 日志）
+      IC_API_AUTH_ENABLED: "${IC_API_AUTH_ENABLED:-true}"
+      IC_API_KEYS:          "${IC_API_KEYS:-}"
+      IC_API_KEYS_FILE:     "${IC_API_KEYS_FILE:-}"
+      IC_API_KEY_DEFAULT_RPM:  "${IC_API_KEY_DEFAULT_RPM:-60}"
+      IC_API_KEY_DEFAULT_BURST: "${IC_API_KEY_DEFAULT_BURST:-10}"
+      IC_API_LEGACY_ALLOW: "${IC_API_LEGACY_ALLOW:-false}"
+    volumes:
+      - ./logs:/app/logs
+     # - ./keys.json:/app/keys.json:ro  # 环境变量修改 ${IC_API_KEYS_FILE:/app/keys.json}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8091/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

@@ -1,0 +1,105 @@
+"""企业版插件契约（CE ↔ EE 的接缝）。
+
+开源版 ``invoice_cn_ce`` 的 wheel 里**不含任何企业版实现**。企业版以
+**独立的 distribution** ``invoice_cn_ee`` 发布，依赖 ``invoice-cn-ce==<同版本>``；
+装上之后由本模块发现并加载。
+
+CE 侧只依赖下面这几个方法，EE 侧怎么实现都行：
+
+``name``
+    插件名，用于日志。
+
+``entitlements() -> Entitlements``
+    结合许可证给出**实际**能力。许可证缺失 / 过期 / 签名不合法时必须
+    返回 ``edition=ce`` 的 Entitlements（降级），不能"放行"。
+
+``register_customs_route(app)`` / ``register_batch_route(app)`` /
+``register_acceptance_route(app)``
+    注册企业版路由。插件缺席时 CE 注册 403 占位路由，保证两版路由表
+    一致 —— 客户端不会因为版本差异拿到 404。
+
+``sync_parsers(features)``
+    按授权状态同步 dispatch 规则（幂等）。入参是**当前实际授予的能力集**
+    （``invoice_cn_ce.editions.Feature`` 的集合），按能力逐个判断：企业版的报关单 /
+    电子承兑规则必须**只在被授权时**注册，否则未授权的安装会通过
+    ``/formats`` 泄漏企业版能力。
+"""
+
+from __future__ import annotations
+
+import importlib
+import importlib.util
+import logging
+from typing import Optional, Protocol
+
+from fastapi import FastAPI
+
+from invoice_cn_ce.editions import Entitlements, Feature
+
+log = logging.getLogger("invoice_cn_ce.plugins")
+
+#: 企业版发行包名。CE 的 wheel 里不存在这个模块。
+EE_PACKAGE = "invoice_cn_ee"
+
+
+class InvoiceCnPlugin(Protocol):
+    """企业版插件需要实现的接口。"""
+
+    name: str
+
+    def entitlements(self) -> Entitlements:
+        """返回当前实际能力（已结合许可证）。"""
+        ...
+
+    def register_customs_route(self, app: FastAPI) -> None:
+        """注册报关单提取路由（``POST /customs/batch``）的真实实现。"""
+        ...
+
+    def register_batch_route(self, app: FastAPI) -> None:
+        """注册 ``POST /invoice/batch`` 的真实实现。"""
+        ...
+
+    def register_acceptance_route(self, app: FastAPI) -> None:
+        """注册电子承兑汇票批量提取路由（``POST /acceptance/batch``）的真实实现。
+
+        **只有批量端点** —— 单文件端点 ``POST /acceptance`` 不存在。
+
+        CE 侧用 ``getattr`` 兜底成 403 占位路由：插件缺这个方法时服务照样起得来，
+        只是该端点不可用。
+        """
+        ...
+
+    def sync_parsers(self, features: frozenset[Feature]) -> None:
+        """按授权状态同步 dispatch 规则（幂等）。
+
+        ``features`` 是当前实际授予的能力集；插件按能力逐个注册 / 撤销
+        自己的解析规则。
+        """
+        ...
+
+
+def load_plugin() -> Optional[InvoiceCnPlugin]:
+    """发现并加载企业版插件；没安装则返回 ``None``。
+
+    找不到模块是正常情况（开源版），不算错误；装了但导入失败则是安装
+    出了问题，要记日志 —— 但同样只降级为 CE，不因此放行任何企业版能力。
+    """
+    try:
+        spec = importlib.util.find_spec(EE_PACKAGE)
+    except (ImportError, ValueError):
+        spec = None
+    if spec is None:
+        return None
+    try:
+        module = importlib.import_module(EE_PACKAGE)
+    except Exception as exc:  # noqa: BLE001 — 插件坏了只能降级
+        log.error("failed to import %s: %s", EE_PACKAGE, exc)
+        return None
+    plugin = getattr(module, "PLUGIN", None)
+    if plugin is None:
+        log.error("%s does not export PLUGIN", EE_PACKAGE)
+        return None
+    return plugin
+
+
+__all__ = ["EE_PACKAGE", "InvoiceCnPlugin", "load_plugin"]

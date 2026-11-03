@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f6f8fa"/><stop offset="100%" stop-color="#eef1f5"/></linearGradient></defs>
+<rect width="1200" height="640" fill="url(#bg)"/>
+<text x="36" y="46" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#1f2328">invoice_cn_ce · 一张发票进去，结构化字段出来</text>
+<text x="36" y="70" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="13" fill="#57606a">下面这份输出是真实调用 POST /invoice 的返回结果，票面单位信息已脱敏</text>
+<rect x="36" y="96" width="430" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="36" y="96" width="430" height="34" rx="10" fill="#0969da"/>
+<rect x="36" y="120" width="430" height="10" fill="#0969da"/>
+<text x="50" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">① 调接口</text>
+<text x="50" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">HTTP 或 Python，都一行</text>
+<rect x="52" y="164" width="398" height="98" rx="8" fill="#f6f8fa" stroke="#e1e4e8"/>
+<text x="66" y="188" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">curl -H &#x27;X-API-Key: $KEY&#x27; \</text>
+<text x="66" y="208" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     -F &#x27;file=@购_材料_01.pdf&#x27; \</text>
+<text x="66" y="228" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     http://localhost:8091/invoice</text>
+<rect x="52" y="282" width="236" height="28" rx="6" fill="#fff" stroke="#d0d7de"/>
+<text x="66" y="301" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#0969da">购_材料_01.pdf</text>
+<text x="52" y="334" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">单份 / 批量均可；PDF、XML、OFD 通用</text>
+<text x="52" y="358" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">批量一次传多份，按输入顺序返回数组</text>
+<rect x="52" y="384" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="410" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">也可以直接当 Python 库调：</text>
+<text x="66" y="436" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">from invoice_cn_ce import parse_pdf</text>
+<text x="66" y="455" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">resp = parse_pdf(data, filename=&quot;a.pdf&quot;)</text>
+<text x="66" y="474" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">resp.total_amount   # &#x27;140141.09&#x27;</text>
+<rect x="52" y="500" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="526" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">纯 Python，无需 JVM，无需外部 OCR 服务</text>
+<text x="52" y="550" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">Apache-2.0，可直接嵌进现有系统</text>
+<rect x="500" y="96" width="664" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="500" y="96" width="664" height="34" rx="10" fill="#1a7f37"/>
+<rect x="500" y="120" width="664" height="10" fill="#1a7f37"/>
+<text x="514" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">② 拿字段</text>
+<text x="514" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">固定字段名，直接落库 / 进 ERP</text>
+<text x="516" y="174" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">发票类型</text>
+<text x="628" y="174" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">电子发票（增值税专用发票）</text>
+<text x="516" y="200" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">发票号码</text>
+<text x="628" y="200" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">25502000000000000001</text>
+<text x="516" y="226" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">开票日期</text>
+<text x="628" y="226" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">2025-11-27</text>
+<text x="516" y="252" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">购买方</text>
+<text x="628" y="252" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例采购方有限公司</text>
+<text x="516" y="278" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">购买方税号</text>
+<text x="628" y="278" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">91330100MAEXAMPLE1X</text>
+<text x="516" y="304" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">销售方</text>
+<text x="628" y="304" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例销售方科技有限公司</text>
+<text x="516" y="330" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">销售方税号</text>
+<text x="628" y="330" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">91330100MAEXAMPLE2Y</text>
+<text x="516" y="356" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">不含税金额</text>
+<text x="628" y="356" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">124018.66</text>
+<text x="516" y="382" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">税额</text>
+<text x="628" y="382" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">16122.43</text>
+<text x="516" y="408" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">价税合计</text>
+<text x="628" y="408" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">140141.09</text>
+<text x="516" y="434" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">价税合计大写</text>
+<text x="628" y="434" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">壹拾肆万零壹佰肆拾壹圆零玖分</text>
+<text x="516" y="460" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">开票人</text>
+<text x="628" y="460" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">张某某</text>
+<text x="516" y="494" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">message</text>
+<text x="628" y="494" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1a7f37">success</text>
+<rect x="516" y="500" width="632" height="1" fill="#e1e4e8"/>
+<text x="516" y="526" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">字段名固定、跨票种一致 —— 直接映射到你的表结构</text>
+<text x="516" y="550" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">解析失败时 message 给出原因，不会静默返回空字段</text>
+<text x="36" y="618" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#6e7781">商品明细 items[] 仅 XML / OFD 全电票填充；PDF 版票面不含明细行时返回空数组。</text>
+</svg>

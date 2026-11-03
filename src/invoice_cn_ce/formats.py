@@ -1,0 +1,184 @@
+"""Unified parse entry point.
+
+Auto-detects XML vs PDF by filename extension and magic bytes, then
+dispatches to the appropriate parser.  All outputs share the same
+``ExtractResponse`` shape regardless of the underlying format.
+
+When ``Settings.cache_size > 0`` (the default) the function consults an
+LRU cache keyed on ``sha256(contents) + filename``.  Repeat uploads of
+the same file return the cached response instantly.
+"""
+
+from __future__ import annotations
+
+from typing import Optional
+
+from pdfplumber.utils.exceptions import PdfminerException
+
+from invoice_cn_ce.cache import get_cache
+from invoice_cn_ce.config import settings
+from invoice_cn_ce.parsers.ofd_invoice import parse_ofd_invoice
+from invoice_cn_ce.parsers.xml_invoice import parse_xml_invoice
+from invoice_cn_ce.pipeline import run
+from invoice_cn_ce.schemas import ExtractResponse, InvoiceRecord
+
+# Maximum number of characters echoed back in an error message.
+# Internal exceptions (PdfminerException in particular) can embed long
+# paths / trailer text — we truncate so the wire response stays bounded
+# and we don't leak internals (H13).
+_MAX_ERR_TAIL = 200
+
+
+def _truncate(value: object, limit: int = _MAX_ERR_TAIL) -> str:
+    s = str(value)
+    if len(s) <= limit:
+        return s
+    return s[: limit - 1] + "…"
+
+
+def detect_format(contents: bytes, filename: str) -> str:
+    """Identify document format: ``"xml"``, ``"ofd"`` or ``"pdf"`` (default)."""
+
+    if filename and filename.lower().endswith("xml"):
+        return "xml"
+    if filename and filename.lower().endswith("ofd"):
+        return "ofd"
+    if contents[:5] == b"<?xml":
+        return "xml"
+    # OFD is a ZIP archive; the standard mandates ``OFD.xml`` at root.
+    # Sniff the magic + central directory cheaply without paying for a
+    # full ZIP parse here; the real validation happens inside
+    # ``parse_ofd_invoice``.
+    if contents[:2] == b"PK":
+        try:
+            if b"OFD.xml" in contents[: 2 * 1024 * 1024]:
+                return "ofd"
+        except Exception:
+            pass
+    return "pdf"
+
+
+def _parse_ofd(contents: bytes, filename: str) -> ExtractResponse:
+    record: Optional[InvoiceRecord] = parse_ofd_invoice(contents)
+    if record is None:
+        return ExtractResponse(
+            file=filename,
+            message="error: ofd_parse_failed: malformed or unsupported OFD",
+        )
+    return ExtractResponse(
+        file=filename,
+        page_count=record.page_count,
+        invoice_type=record.invoice_type,
+        invoice_number=record.invoice_number,
+        issue_date=record.issue_date,
+        buyer_name=record.buyer_name,
+        buyer_tax_id=record.buyer_tax_id,
+        seller_name=record.seller_name,
+        seller_tax_id=record.seller_tax_id,
+        amount_without_tax=record.amount_without_tax,
+        tax_amount=record.tax_amount,
+        total_amount=record.total_amount,
+        total_amount_upper=record.total_amount_upper,
+        payee=record.payee,
+        reviewer=record.reviewer,
+        drawer=record.drawer,
+        expense_category=record.expense_category,
+        expense_category_label=record.expense_category_label,
+        expense_category_source=record.expense_category_source,
+    )
+
+
+def _parse_xml(contents: bytes, filename: str) -> ExtractResponse:
+    record: Optional[InvoiceRecord] = parse_xml_invoice(contents)
+    if record is None:
+        return ExtractResponse(
+            file=filename,
+            message="error: xml_parse_failed: malformed or unsupported XML",
+        )
+    return ExtractResponse(
+        file=filename,
+        page_count=record.page_count,
+        invoice_type=record.invoice_type,
+        invoice_number=record.invoice_number,
+        issue_date=record.issue_date,
+        buyer_name=record.buyer_name,
+        buyer_tax_id=record.buyer_tax_id,
+        seller_name=record.seller_name,
+        seller_tax_id=record.seller_tax_id,
+        amount_without_tax=record.amount_without_tax,
+        tax_amount=record.tax_amount,
+        total_amount=record.total_amount,
+        total_amount_upper=record.total_amount_upper,
+        payee=record.payee,
+        reviewer=record.reviewer,
+        drawer=record.drawer,
+        # Only the XML parser fills line items; PDF / OFD keep the default
+        # empty list.  Keep in sync with any new InvoiceRecord field -- the
+        # field-by-field copy above silently drops whatever it forgets.
+        items=record.items,
+        expense_category=record.expense_category,
+        expense_category_label=record.expense_category_label,
+        expense_category_source=record.expense_category_source,
+    )
+
+
+def _build_response(record: InvoiceRecord, filename: str, message: str) -> ExtractResponse:
+    return ExtractResponse(
+        file=filename,
+        page_count=record.page_count,
+        invoice_type=record.invoice_type,
+        invoice_number=record.invoice_number,
+        issue_date=record.issue_date,
+        buyer_name=record.buyer_name,
+        buyer_tax_id=record.buyer_tax_id,
+        seller_name=record.seller_name,
+        seller_tax_id=record.seller_tax_id,
+        amount_without_tax=record.amount_without_tax,
+        tax_amount=record.tax_amount,
+        total_amount=record.total_amount,
+        total_amount_upper=record.total_amount_upper,
+        payee=record.payee,
+        reviewer=record.reviewer,
+        drawer=record.drawer,
+        expense_category=record.expense_category,
+        expense_category_label=record.expense_category_label,
+        expense_category_source=record.expense_category_source,
+        message=message,
+    )
+
+
+def parse_pdf(contents: bytes, filename: str = "") -> ExtractResponse:
+    if not contents:
+        return ExtractResponse(file=filename, message="error: empty_file")
+    max_bytes = settings.max_file_mb * 1024 * 1024
+    if len(contents) > max_bytes:
+        return ExtractResponse(
+            file=filename,
+            message=f"error: file_too_large: {len(contents)} > {max_bytes} bytes",
+        )
+
+    # Cache lookup (LRU; honours settings.cache_size).
+    cache = get_cache()
+    cached = cache.get(contents, filename)
+    if cached is not None:
+        return cached  # type: ignore[return-value]
+
+    if detect_format(contents, filename) == "xml":
+        resp = _parse_xml(contents, filename)
+    elif detect_format(contents, filename) == "ofd":
+        resp = _parse_ofd(contents, filename)
+    else:
+        try:
+            result = run(contents)
+        except (ValueError, KeyError, AttributeError, PdfminerException) as exc:
+            resp = ExtractResponse(
+                file=filename,
+                message=f"error: parse_failed: {_truncate(exc)}",
+            )
+        else:
+            resp = _build_response(result.record, filename, result.message)
+
+    # Only cache successful and soft-message responses — hard errors are not stable.
+    if not resp.message.startswith("error:"):
+        cache.put(contents, filename, resp)
+    return resp

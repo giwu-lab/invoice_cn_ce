@@ -1,0 +1,59 @@
+version: 1
+disable_existing_loggers: false
+
+formatters:
+  default:
+    (): logging.Formatter
+    fmt: '%(asctime)s [%(levelname)s] %(message)s'
+  access:
+    (): uvicorn.logging.AccessFormatter
+    fmt: '%(asctime)s [%(levelname)s] %(client_addr)s - "%(request_line)s" %(status_code)s'
+  audit:
+    (): logging.Formatter
+    fmt: '%(asctime)s [AUDIT] %(message)s'
+
+handlers:
+  default:
+    (): logging.StreamHandler
+    formatter: default
+    stream: ext://sys.stderr
+  access:
+    (): logging.StreamHandler
+    formatter: access
+    stream: ext://sys.stdout
+  audit_file:
+    (): logging.handlers.RotatingFileHandler
+    formatter: audit
+    filename: logs/audit.log
+    maxBytes: 10485760   # 10 MiB
+    backupCount: 5
+    encoding: utf-8
+
+loggers:
+  uvicorn.error:
+    level: INFO
+    handlers: [default]
+    propagate: false
+  uvicorn.access:
+    level: INFO
+    handlers: [access]
+    propagate: false
+  invoice_cn_ce.audit:
+    level: INFO
+    handlers: [audit_file]
+    propagate: false
+  # Keep this file ASCII-only.  uvicorn loads it with yaml.safe_load() on a
+  # file opened in the *locale* encoding, so on a GBK-locale Windows host
+  # any non-ASCII byte (e.g. a Chinese comment) makes the config unloadable
+  # and the server dies with UnicodeDecodeError before it can serve.
+  # The INFO diagnostics of invoice_cn_ce.server / invoice_cn_ce.auth used to be
+  # dropped silently: they propagate up to the root logger, which had no
+  # handler either, so Python's lastResort handler -- WARNING and above --
+  # was the only thing left.  Operators could not see "loaded N API keys
+  # from ..." or the SIGHUP reload confirmation.  invoice_cn_ce.audit keeps its
+  # own file handler and propagate: false, so audit records are not
+  # duplicated onto stdout.
+  invoice_cn_ce:
+    level: INFO
+    handlers: [default]
+    propagate: false

@@ -1,0 +1,71 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+*.egg
+# wheels/ 里的 wheel 本体不入库（体积大），但保留 .gitkeep 占位，
+# 让 Dockerfile 的 `COPY wheels /wheels` 在全新克隆里也成立。
+wheels/*
+!wheels/.gitkeep
+
+# Unit test / coverage reports
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+
+# Type checkers / linters
+.mypy_cache/
+.ruff_cache/
+.dmypy.json
+dmypy.json
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Logs and runtime artefacts
+logs/
+*.log
+server.log
+
+# Local environment / secrets (never commit real API keys)
+.env
+# Local API key JSON store (operator-created for dev / JSON-mode
+# testing).  Use deploy/keys.json.example as the committed template.
+keys.json
+
+# Real-world invoice samples (contain sensitive buyer/seller data);
+# only the public test fixtures under tests/ are committed.
+samples/
+
+# Test suite: kept in the private verification environment, not published.
+# The assertions are ground truth against the real samples under samples/,
+# so they carry real party names, tax ids and invoice numbers.
+tests/
+
+# Runtime / deployment artefacts
+logs/invoice_cn_ce.pid
+
+# Rendered PNG previews of docs/assets/*.svg (local preview only;
+# the repository tracks the SVG sources).
+docs/assets/*.png
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~

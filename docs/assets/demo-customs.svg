@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="640" viewBox="0 0 1200 640" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#f6f8fa"/><stop offset="100%" stop-color="#eef1f5"/></linearGradient></defs>
+<rect width="1200" height="640" fill="url(#bg)"/>
+<text x="36" y="46" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="21" font-weight="700" fill="#1f2328">海关出口货物报关单 —— 报关单号、明细项、箱重一次取全</text>
+<text x="36" y="70" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="13" fill="#57606a">POST /customs/batch 的返回字段，票面主体信息已脱敏</text>
+<rect x="36" y="96" width="430" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="36" y="96" width="430" height="34" rx="10" fill="#0969da"/>
+<rect x="36" y="120" width="430" height="10" fill="#0969da"/>
+<text x="50" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">① 调接口</text>
+<text x="50" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">企业版能力，需要有效许可证</text>
+<rect x="52" y="164" width="398" height="130" rx="8" fill="#f6f8fa" stroke="#e1e4e8"/>
+<text x="66" y="188" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">curl -H &#x27;X-API-Key: $KEY&#x27; \</text>
+<text x="66" y="208" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     -F &#x27;files=@报关单A.pdf&#x27; \</text>
+<text x="66" y="228" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     -F &#x27;files=@报关单B.pdf&#x27; \</text>
+<text x="66" y="248" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#24292f">     http://localhost:8091/customs/batch</text>
+<text x="66" y="278" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#57606a"># 同一个 files 字段重复多次</text>
+<rect x="52" y="310" width="236" height="28" rx="6" fill="#fff" stroke="#d0d7de"/>
+<text x="66" y="329" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12" fill="#0969da">报关单A.pdf</text>
+<text x="52" y="362" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">也支持远端地址：-F urls=…</text>
+<rect x="52" y="388" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="414" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">操作联 / 出口退税联都识别</text>
+<text x="52" y="438" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">合并文档只取报关单页，不串页</text>
+<rect x="52" y="464" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="490" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">限额与 /invoice/batch 相同</text>
+<text x="52" y="514" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">最多 50 份 / 单份 10 MB</text>
+<rect x="52" y="540" width="398" height="1" fill="#e1e4e8"/>
+<text x="52" y="566" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">字段字典：GET /formats/customs</text>
+<rect x="500" y="96" width="664" height="470" rx="10" fill="#ffffff" stroke="#d8dee6"/>
+<rect x="500" y="96" width="664" height="34" rx="10" fill="#1a7f37"/>
+<rect x="500" y="120" width="664" height="10" fill="#1a7f37"/>
+<text x="514" y="119" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="14" font-weight="600" fill="#ffffff">② 拿字段</text>
+<text x="514" y="150" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#57606a">表头 21 个字段 + 明细 17 个字段，此处各列出代表项</text>
+<text x="514" y="170" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="11.5" fill="#6e7781">表头未展示：pre_entry_no · producer_name · declarant_name · supervision_mode_name · export_date · declaration_date · bill_of_lading_no 等</text>
+<text x="516" y="196" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">海关编号</text>
+<text x="628" y="196" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">223120260000000001</text>
+<text x="516" y="222" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">报关单类型</text>
+<text x="628" y="222" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">出口退税联</text>
+<text x="516" y="248" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">出口方</text>
+<text x="628" y="248" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例进出口贸易有限公司</text>
+<text x="516" y="274" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">出口方税号</text>
+<text x="628" y="274" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">91500106MAEXAMPLE8E</text>
+<text x="516" y="300" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">申报口岸</text>
+<text x="628" y="300" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">示例港区</text>
+<text x="516" y="326" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">运输方式</text>
+<text x="628" y="326" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">水路运输</text>
+<text x="516" y="352" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">集装箱号</text>
+<text x="628" y="352" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">EXAMPLE0000000</text>
+<text x="516" y="378" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">件数</text>
+<text x="628" y="378" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">3</text>
+<text x="516" y="404" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">毛重 / 净重 (kg)</text>
+<text x="628" y="404" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">858.83 / 749.94</text>
+<text x="516" y="430" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">总价</text>
+<text x="628" y="430" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="12.5" fill="#1f2328">5332.28</text>
+<rect x="516" y="446" width="632" height="1" fill="#e1e4e8"/>
+<text x="516" y="470" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">items[] —— 每行一个商品项</text>
+<text x="516" y="492" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">item_no  hs_code  name_and_spec  declared_qty</text>
+<text x="516" y="510" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">unit_price  total_price  currency_code  origin_country_code</text>
+<text x="516" y="528" font-family="'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace" font-size="11.5" fill="#24292f">final_destination_code</text>
+<text x="516" y="552" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">HS 编码 10 位，明细与表头字段同一套命名</text>
+<text x="516" y="572" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12.5" fill="#57606a">直接映射到报关行的表结构</text>
+<text x="36" y="618" font-family="'Segoe UI','PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif" font-size="12" fill="#6e7781">报关单解析属企业版能力，开源版调用该端点返回 403 feature_not_available。</text>
+</svg>
